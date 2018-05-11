@@ -23,6 +23,8 @@ The exercises are designed in a way that requires personal guidance, so if you a
 - We officially support the `stack` build tool.
 - The test suite is converted from `tasty` to `Hspec`.
 
+The original course is located [here](https://github.com/data61/fp-course/).
+
 ### Getting Help
 
 There are two mailing lists for asking questions. All questions are welcome,
