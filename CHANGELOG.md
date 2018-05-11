@@ -1,8 +1,4 @@
-0.1.1
-
-This change log started.
-
-0.1.2
+# 0.1.2
 
 Switch around the the hex parser exercise. There are now two exercises:
 
@@ -11,3 +7,6 @@ Switch around the the hex parser exercise. There are now two exercises:
 
 This switching is required to implement `jsonString` parser properly (without a try-parser).
 
+# 0.1.1
+
+This change log started.
