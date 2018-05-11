@@ -43,4 +43,3 @@ spec = do
     it "Full"  $ void (Full 7) `shouldBe` Full ()
     it "Empty" $ void Empty `shouldBe` Empty
     it "(->)"  $ void (+10) 5 `shouldBe` ()
-

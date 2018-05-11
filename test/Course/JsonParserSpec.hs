@@ -130,4 +130,3 @@ spec = do
         input =
           "{ \"key1\" : true , \"key2\" : [7, false] , \"key3\" : { \"key4\" : null } }"
       parse jsonObject input `shouldBe` result
-

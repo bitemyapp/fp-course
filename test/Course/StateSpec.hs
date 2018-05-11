@@ -90,4 +90,3 @@ spec = do
     it "7" $ isHappy 7 `shouldBe` True
     it "42" $ isHappy 42 `shouldBe`  False
     it "44" $ isHappy 44 `shouldBe`  True
-
