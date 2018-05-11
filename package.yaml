@@ -1,0 +1,94 @@
+name: course
+version: '0.1.4'
+synopsis: Source code for a functional programming course
+description: Source code for a course in functional programming using Haskell
+category: Education
+author: ! 'Tony Morris <tmorris@tmorris.net>
+  Mark Hibberd <mthibberd@gmail.com>
+  Ben Sinclair <ben.d.sinclair@gmail.com>
+  James Earl Douglas <james@earldouglas.com>
+  Eric Torreborre <etorreborre@yahoo.com>'
+maintainer: Chris Allen <cma@bitemyapp.com>
+copyright: ! 'Copyright (C) 2010-2013 Tony Morris
+  Copyright (C) 2012-2015 National ICT Australia Limited
+  Copyright (C) 2012      James Earl Douglas
+  Copyright (C) 2012      Ben Sinclair
+  Copyright (C) 2016-2017 Data61'
+license: BSD3
+license-file: etc/LICENCE
+homepage: https://github.com/data61/fp-course
+git: git@github.com:data61/fp-course.git
+bug-reports: https://github.com/data61/fp-course/issues
+
+tested-with: GHC==8.0.2
+
+extra-source-files:
+- etc/CONTRIBUTORS
+- changelog
+
+ghc-options: -Wall
+
+library:
+  source-dirs: src
+
+  default-extensions:
+  - NoImplicitPrelude
+  - ScopedTypeVariables
+  - InstanceSigs
+
+  ghc-options:
+  - -fwarn-incomplete-uni-patterns
+  - -fno-warn-unused-binds
+  - -fno-warn-unused-do-bind
+  - -fno-warn-unused-imports
+  - -fno-warn-type-defaults
+  - -ferror-spans
+
+  exposed-modules:
+  - Course
+  - Course.Anagrams
+  - Course.Applicative
+  - Course.Cheque
+  - Course.Comonad
+  - Course.Compose
+  - Course.Core
+  - Course.ExactlyOne
+  - Course.Extend
+  - Course.FastAnagrams
+  - Course.FileIO
+  - Course.Functor
+  - Course.Interactive
+  - Course.JsonParser
+  - Course.JsonValue
+  - Course.List
+  - Course.ListZipper
+  - Course.Monad
+  - Course.MonadTutorial
+  - Course.MoreParser
+  - Course.Optional
+  - Course.Parser
+  - Course.Person
+  - Course.State
+  - Course.StateT
+  - Course.Traversable
+  - Course.Validation
+
+  dependencies:
+  - base <5 && >=4
+  - containers >=0.4.0.0
+  - array >=0.4
+
+tests:
+  tasty:
+    main: TastyLoader.hs
+    source-dirs: test
+    ghc-options:
+    - -threaded
+    dependencies:
+    - base <5 && >=3
+    - course
+    - HUnit >=1.5
+    - QuickCheck >=2.9
+    - tasty >=0.11
+    - tasty-hunit >=0.9
+    - tasty-quickcheck >=0.8

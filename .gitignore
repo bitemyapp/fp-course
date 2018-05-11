@@ -33,6 +33,9 @@ TAGS
 # Stack
 .stack-work/
 
+# Hpack
+*.cabal
+
 # Vagrant
 .vagrant
 ops/*.retry
