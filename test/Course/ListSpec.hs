@@ -5,9 +5,9 @@ module Course.ListSpec where
 
 import qualified Prelude               as P (length)
 
-import           Test.QuickCheck       (forAllShrink)
+import           Test.Hspec            (Spec, describe, it, shouldBe)
 import           Test.Hspec.QuickCheck (prop)
-import Test.Hspec (describe, it, shouldBe, Spec)
+import           Test.QuickCheck       (forAllShrink)
 
 import           Course.Core
 import           Course.Gens           (forAllLists, genIntegerAndList, genList,
