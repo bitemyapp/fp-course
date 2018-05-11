@@ -1,23 +1,12 @@
 # Functional Programming Course
 
-![Data61](http://i.imgur.com/0h9dFhl.png)
+![Haskell logo](https://haskell-lang.org/static/img/logo.png?etag=rJR84DMh)
 
-### Written by Tony Morris & Mark Hibberd for Data61 (formerly NICTA)
+### Written by Tony Morris & Mark Hibberd for Data61
 
 ### With contributions from individuals (thanks!)
 
-#### Special note 1
-
-If you have arrived here by https://github.com/data61/fp-course and you are
-looking for the *answers* (not the exercises), please go to https://github.com/tonymorris/fp-course
-
-#### Special note 2
-
-As of February 2017, this repository is taking the place of the repository hosted at
-https://github.com/NICTA/course which is deprecated. 
-
-Data61 replaces what was NICTA since July 2016. The new repository is located at
-https://github.com/data61/fp-course.
+This version is maintained by Chris Allen at [https://github.com/bitemyapp/fp-course](https://github.com/bitemyapp/fp-course)
 
 #### Introduction
 
@@ -25,43 +14,18 @@ The course is structured according to a linear progression and uses the Haskell
 programming language to learn programming concepts pertaining to functional
 programming.
 
-Exercises are annotated with a comment containing the word "Exercise." The existing code compiles, however answers have
-been replaced with a call to the Haskell `error` function and so the code will throw an exception if it is run. Some
-exercises contain tips, which are annotated with a preceding "Tip:". It is not necessary to adhere to tips. Tips are
-provided for potential guidance, which may be discarded if you prefer a different path to a solution.
+Exercises are annotated with a comment containing the word "Exercise." The existing code compiles, however answers have been replaced with a call to the Haskell `error` function and so the code will throw an exception if it is run. Some exercises contain tips, which are annotated with a preceding "Tip:". It is not necessary to adhere to tips. Tips are provided for potential guidance, which may be discarded if you prefer a different path to a solution.
 
-The exercises are designed in a way that requires personal guidance, so if you
-attempt it on your own and feel a little lost, this is normal. All the
-instructions are not contained herein.
+The exercises are designed in a way that requires personal guidance, so if you attempt it on your own and feel a little lost, this is normal. All the instructions are not contained herein.
 
 ### Getting Help
 
 There are two mailing lists for asking questions. All questions are welcome,
 however, your first post might be moderated. This is simply to prevent spam.
 
-1. [[nicta-fp]](https://groups.google.com/forum/#!forum/nicta-fp) is a Google
-   Group for any queries related to functional programming. This mailing list is
-   owned by Data61 and is open to the public. Questions relating to this course
-   are most welcome here.
+1. \#haskell-beginners [on Freenode](irc://irc.freenode.net/#haskell-beginners) is an IRC channel that is operated by Chris Allen. The participants are volunteers and fellow learners who help others on their own time.
 
-2. [[haskell-exercises]](https://groups.google.com/forum/#!forum/haskell-exercises)
-   is a Google Group for queries related specifically to this Data61 functional
-   programming course material. This mailing list is not owned by Data61, but is
-   run by others who are keen to share ideas relating to the course.
-
-3. \#nicta-course [on Freenode](irc://irc.freenode.net/#nicta-course) is an IRC channel that
-   is operated by others who are going through this course material on their
-   own time and effort.
-
-4. \#qfpl [on Freenode](irc://irc.freenode.net/#qfpl) is the IRC channel of the
-   Queensland Functional Programming Lab - the team that runs the course in Brisbane.
-
-5. \#scalaz [on Freenode](irc://irc.freenode.net/#scalaz) is an IRC channel that is operated
-   by others who are keen to share ideas relating to functional programming in
-   general. Most of the participants of this channel have completed the Data61
-   functional programming course to some extent. They are in various timezones
-   and share a passion for functional programming, so may be able to provide
-   relatively quick assistance with questions.
+2. \#haskell or \#haskell-beginners [on the FPChat Slack](https://fpchat-invite.herokuapp.com/). FPChat is a Slack community of fellow travelers. The \#haskell and \#haskell-beginners channels are good places to seek assistance with this course.
 
 ### Getting Started
 
@@ -69,11 +33,11 @@ however, your first post might be moderated. This is simply to prevent spam.
 instead. [Instructions](ops/README.md) for automatically building a virtual machine are
 available in this repository for your convenience.
 
-1. Install the Glasgow Haskell Compiler (GHC) version 8.0.2.
+1. [Install Stack](https://haskellstack.org/) which will manage your compiler versions automatically and enable you to build this project.
 
 2. Change to the directory containing this document.
 
-3. Execute the command `ghci`, which will compile and load all the source code.
+3. Execute the command `make ghci`, which will compile and load all the source code.
    You may need to set permissions on the root directory and the ghci configuration
    file, `chmod go-w .ghci ./`.
 

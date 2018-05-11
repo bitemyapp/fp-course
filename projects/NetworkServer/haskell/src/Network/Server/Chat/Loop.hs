@@ -1,6 +1,6 @@
 module Network.Server.Chat.Loop where
 
-import Prelude hiding (mapM_, catch)
+import Prelude hiding (mapM_)
 import Network(PortID(..), sClose, withSocketsDo, listenOn)
 import System.IO(BufferMode(..))
 import Data.IORef(IORef, newIORef, readIORef)

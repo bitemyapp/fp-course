@@ -1,6 +1,6 @@
 module Network.Server.TicTacToe.Loop where
 
-import Prelude hiding (mapM_, catch)
+import Prelude hiding (mapM_)
 import System.IO(BufferMode(..))
 import Network(PortID(..), sClose, withSocketsDo, listenOn)
 import Data.IORef(IORef, newIORef, readIORef)
