@@ -29,9 +29,9 @@ however, your first post might be moderated. This is simply to prevent spam.
 
 ### Getting Started
 
-**NOTE** If you do not wish to install these dependencies, you may use a virtual machine
-instead. [Instructions](ops/README.md) for automatically building a virtual machine are
-available in this repository for your convenience.
+<!-- **NOTE** If you do not wish to install these dependencies, you may use a virtual machine -->
+<!-- instead. [Instructions](ops/README.md) for automatically building a virtual machine are -->
+<!-- available in this repository for your convenience. -->
 
 1. [Install Stack](https://haskellstack.org/) which will manage your compiler versions automatically and enable you to build this project.
 
@@ -125,8 +125,6 @@ available in this repository for your convenience.
    Using tab characters in Haskell can lead to confusing error messages.
    GHC will give you a warning if your program contains a tab character.
 
-6. Do not use the stack build tool. It does not work.
-
 ### Running the tests
 
 Tests are available as a [tasty](https://hackage.haskell.org/package/tasty)
@@ -142,47 +140,40 @@ properties (`testProperty` function).
 
 To run the full test suite, build the project as follows:
 
-    > cabal update
-    > cabal install cabal-install
-    > cabal install --only-dependencies --enable-tests
-    > cabal configure --enable-tests
-    > cabal build
-    > cabal test
+    > stack test
 
 Tasty will also allow you to run only those tests whose description match a
 pattern. Tests are organised in nested groups named after the relevant module
 and function, so pattern matching should be intuitive. For example, to run the
 tests for the `List` module you could run:
 
-    > cabal test tasty --show-detail=direct --test-option=--pattern=Tests/List/
+    > stack test --ta "--pattern=Tests/List/"
 
 Likewise, to run only the tests for the `headOr` function in the `List` module, you could use:
 
-    > cabal test tasty --show-detail=direct --test-option=--pattern=List/headOr
+    > stack test --ta "--pattern=List/headOr"
 
 In addition, GHCi may be used to run tasty tests. Assuming you have run `ghci`
-from the root of the project, you may do the following. Remember that GHCi has
-tab completion, so you can save yourself some typing.
+from the root of the project, you may do the following:
 
-    > -- import the defaultMain function from Tasty - runs something of type TestTree
-    > import Test.Tasty (defaultMain)
-    >
-    > -- Load the test module you'd like to run tests for
-    > :l test/Course/ListTest.hs
-    >
-    > -- Browse the contents of the loaded module - anything of type TestTree
-    > -- may be run
-    > :browse Course.ListTest
-    >
-    > -- Run test for a particular function
-    > defaultMain headOrTest
+```
+make test-ghci
+```
 
+From there you can run `:main` at your GHCi prompt to run the entire test suite. If you want to do the equivalent of `stack test --ta "--pattern=Tests/List/"` in GHCi do this:
 
-#### doctest
+```
+:main --pattern=Tests/List/
+```
 
-The doctest tests are a mirror of the tasty tests that reside in comments
-alongside the code. They are not executable, but examples can be copied into
-GHCI. Examples begin with `>>>` while properties begin with `prop>`.
+Similarly you can run:
+
+```
+:main --pattern=List/headOr
+```
+
+To target just the `List/headOr` tests. If you've changed your code, run `:r` to reload and then run your `:main` invocation again.
+
 
 ### Progression
 
@@ -227,35 +218,26 @@ answers are filled out, so that progress on to `Course.Parser` can begin
 (which depends on correct answers up to `Course.Monad`). It is recommended to
 take this deviation if it is felt that there is more reward in doing so.
 
-Answers for the exercises can be found here:
-[https://github.com/tonymorris/fp-course](https://github.com/tonymorris/fp-course)
-
 After these are completed, complete the exercises in the `projects` directory.
 
-### Leksah
+### IDEs
 
-If you choose to use the [Leksah IDE for Haskell](http://leksah.org/), the
-following tips are recommended:
+The use of IDEs (integrated development environments) is not recommended as many Haskell beginners will spin their wheels trying to get the tools installed and working.
 
-* Clone the git repo use Package -> Add to add course.cabal.
-* Click on the green tick on the toolbar to include `cabal test`
-  in each build and list the failures in the Errors pane.
-* Choose Package -> Configure to make sure `--enable-tests`
-  is used (just building may cause cabal to configure without).
-* Ctrl + B to build (Command + B on OS X).
-* The test failures should show up in Panes -> Errors.
-* Pane -> Log often has useful error messages.
-* Ctrl + J (Command + J on OS X) selects the next item in
-  Errors pane and goes to it in the source (hold down Shift
-  to go to previous item).
-* Ctrl + Enter on a line starting "-- >>>" will run the
-  selected expression in GHCi (Ctrl + Enter on OS X too).
-  The output goes to Panes -> Log and Panes -> Output.
-* The last GHCi expression is reevaluated after each :reload
-  triggered by changes in the code.
-* Uncheck Debug -> GHCi when you are done with GHCi and
-  Leksah will go back to running cabal build and cabal test
-  instead.
+Instead, if you'd like maximum interactivity and fast feedback the following is recommended:
+
+- A regular text editor which can syntax highlight and indent Haskell source code. Sublime Text, Emacs, vim, Atom, and Visual Studio Code are all suitable for this purpose.
+
+- A GHCi REPL created with `make ghci` or `make test-ghci`.
+
+- For automatic type errors, use `ghcid`. To install ghcid run `make dev-deps` and then to run `ghcid` use: `make ghcid`. When `ghcid` is ready to go, it should look something like:
+
+```
+All good (27 modules)
+```
+
+From there you should be able to edit a source file, save, and see `ghcid` reload and type-check your code automatically.
+
 
 ### Introducing Haskell
 
@@ -301,6 +283,9 @@ covered first.
 * GHCi
   * `:type`
   * `:info`
+  * `:load:`
+  * `:reload`
+  * `:main`
 * values
 * type signatures
   * `x :: T` is read as *x is of the type T*

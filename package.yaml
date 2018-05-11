@@ -79,7 +79,7 @@ library:
   - array >=0.4
 
 tests:
-  tasty:
+  course-tests:
     main: TastyLoader.hs
     source-dirs: test
     ghc-options:
