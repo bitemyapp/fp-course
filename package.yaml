@@ -1,5 +1,5 @@
 name: course
-version: '0.1.4'
+version: 0.1.5
 synopsis: Source code for a functional programming course
 description: Source code for a course in functional programming using Haskell
 category: Education
@@ -16,15 +16,15 @@ copyright: ! 'Copyright (C) 2010-2013 Tony Morris
   Copyright (C) 2016-2017 Data61'
 license: BSD3
 license-file: etc/LICENCE
-homepage: https://github.com/data61/fp-course
-git: git@github.com:data61/fp-course.git
-bug-reports: https://github.com/data61/fp-course/issues
+homepage: https://github.com/bitemyapp/fp-course
+git: git@github.com:bitemyapp/fp-course.git
+bug-reports: https://github.com/bitemyapp/fp-course/issues
 
 tested-with: GHC==8.0.2
 
 extra-source-files:
 - etc/CONTRIBUTORS
-- changelog
+- CHANGELOG.md
 
 ghc-options: -Wall
 
@@ -80,15 +80,13 @@ library:
 
 tests:
   course-tests:
-    main: TastyLoader.hs
+    main: Spec.hs
     source-dirs: test
     ghc-options:
     - -threaded
     dependencies:
     - base <5 && >=3
     - course
-    - HUnit >=1.5
+    - hspec
+    - hspec-discover
     - QuickCheck >=2.9
-    - tasty >=0.11
-    - tasty-hunit >=0.9
-    - tasty-quickcheck >=0.8

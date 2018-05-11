@@ -18,6 +18,11 @@ Exercises are annotated with a comment containing the word "Exercise." The exist
 
 The exercises are designed in a way that requires personal guidance, so if you attempt it on your own and feel a little lost, this is normal. All the instructions are not contained herein.
 
+#### Differences from the Original
+
+- We officially support the `stack` build tool.
+- The test suite is converted from `tasty` to `hspec`.
+
 ### Getting Help
 
 There are two mailing lists for asking questions. All questions are welcome,

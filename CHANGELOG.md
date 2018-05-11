@@ -1,3 +1,7 @@
+# 0.1.5
+
+- Change the test suite from `tasty` to `hspec`
+
 # 0.1.2
 
 Switch around the the hex parser exercise. There are now two exercises:
