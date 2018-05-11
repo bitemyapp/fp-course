@@ -15,7 +15,7 @@ import           Course.Optional   (Optional (..))
 import           Course.Extend     (cojoin, (<<=))
 
 spec :: Spec
-spec = describe "ExtendSpec" $ do
+spec = do
   it "ExactlyOne instance" $
     (id <<= ExactlyOne 7) `shouldBe` ExactlyOne (ExactlyOne 7)
 

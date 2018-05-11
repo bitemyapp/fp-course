@@ -17,7 +17,7 @@ instance Arbitrary a => Arbitrary (Validation a) where
   arbitrary = P.fmap (P.either Error Value) arbitrary
 
 spec :: Spec
-spec = describe "ValidationSpec" $ do
+spec = do
   describe "isError" $ do
     it "true for errors" $
       isError (Error "Message") `shouldBe` True

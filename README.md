@@ -165,16 +165,16 @@ make test-ghci
 From there you can run `:main` at your GHCi prompt to run the entire test suite. If you want to do the equivalent of `stack test --ta "--match=ListSpec"` in GHCi do this:
 
 ```
-:main --match=ListSpec
+:main --match=Course.List/
 ```
 
 Similarly you can run:
 
 ```
-:main --match=ListSpec/headOr
+:main --match=Course.List/headOr
 ```
 
-To target just the `ListSpec/headOr` tests. If you've changed your code, run `:r` to reload and then run your `:main` invocation again.
+To target just the `Course.List/headOr` tests. If you've changed your code, run `:r` to reload and then run your `:main` invocation again.
 
 
 ### Progression

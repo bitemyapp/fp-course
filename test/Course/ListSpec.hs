@@ -23,7 +23,7 @@ import           Course.List           (List (..), filter, find, flatMap,
 import           Course.Optional       (Optional (..))
 
 spec :: Spec
-spec = describe "ListSpec" $ do
+spec = do
   describe "headOr" $ do
     it "headOr on non-empty list" $ headOr 3 (1 :. 2 :. Nil) `shouldBe` 1
     it "headOr on empty list" $ headOr 3 Nil `shouldBe` 3
