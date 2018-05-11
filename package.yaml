@@ -87,6 +87,7 @@ tests:
     dependencies:
     - base <5 && >=3
     - course
+    - hedgehog
     - hspec
     - hspec-discover
     - QuickCheck >=2.9

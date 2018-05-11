@@ -1,12 +1,15 @@
+{-# LANGUAGE NoImplicitPrelude          #-}
+{-# LANGUAGE ScopedTypeVariables        #-}
+{-# LANGUAGE TemplateHaskell            #-}
 {-# OPTIONS_GHC -fno-warn-type-defaults #-}
-{-# LANGUAGE NoImplicitPrelude   #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 
 module Course.ApplicativeSpec where
 
-import           Test.Hspec            (describe, it, Spec, shouldBe)
-import           Test.Hspec.QuickCheck (prop)
-import           Test.QuickCheck       ((===))
+import           Control.Monad (Monad)
+
+import           Hedgehog
+import qualified Hedgehog.Gen as Gen
+import qualified Hedgehog.Range as Range
 
 import           Course.Applicative    (filtering, lift1, lift2, lift3, lift4,
                                         pure, replicateA, sequence, (*>), (<*),
@@ -18,135 +21,203 @@ import           Course.List           (List (..), filter, length, listh,
                                         product, sum)
 import           Course.Optional       (Optional (..))
 
+tests :: IO Bool
+tests = checkSequential $$(discover)
+
+genInt :: Monad m => PropertyT m Int
+genInt = forAll $ Gen.int (Range.linear 0 100)
+
+prop_pureExactlyOne :: Property
+prop_pureExactlyOne =
+  property $ do
+    x <- genInt
+    pure x === ExactlyOne x
+
+prop_applyExactlyOne :: Property
+prop_applyExactlyOne =
+  property $ do
+    x <- genInt
+    y <- genInt
+    (ExactlyOne (+x) <*> ExactlyOne y) === ExactlyOne (x + y)
+
+prop_pureList :: Property
+prop_pureList =
+  property $ do
+    x <- genInt
+    pure x === (x :. Nil)
+
+prop_applyList :: Property
+prop_applyList =
+  property $
+    ((+1) :. (*2) :. Nil <*> listh [1,2,3]) === listh [2,3,4,2,4,6]
+
+prop_lift1ExactlyOne :: Property
+prop_lift1ExactlyOne =
+  property $ do
+    x <- genInt
+    y <- genInt
+    lift1 (+x) (ExactlyOne y) === ExactlyOne (x + y)
+
+prop_lift1ListNil :: Property
+prop_lift1ListNil =
+  property $ do
+    x <- genInt
+    lift1 (+x) Nil === Nil
+
+prop_lift1List :: Property
+prop_lift1List =
+  property $ do
+    lift1 (+1) (listh [1, 2, 3]) === listh [2, 3, 4]
+
+prop_pureOptional :: Property
+prop_pureOptional =
+  property $ do
+    x <- genInt
+    pure x === Full x
+
+prop_applyTwoOptionals :: Property
+prop_applyTwoOptionals =
+  property $ do
+    x <- genInt
+    y <- genInt
+    (Full (+x) <*> Full y) === Full (x + y)
+
+prop_applyLeftEmpty :: Property
+prop_applyLeftEmpty =
+  property $ do
+    x <- genInt
+    (Empty <*> Full x) === (Empty :: Optional Int)
+
+prop_applyRightEmpty :: Property
+prop_applyRightEmpty =
+  property $ do
+    x <- genInt
+    (Full (+x) <*> Empty) === (Empty :: Optional Int)
+
+prop_addition :: Property
+prop_addition =
+  property $
+    ((+) <*> (+10)) 3 === 16
+
+prop_moreAddition :: Property
+prop_moreAddition =
+  property $
+    ((+) <*> (+5)) 3 === 11
+
+prop_evenMoreAddition :: Property
+prop_evenMoreAddition =
+  property $
+    ((+) <*> (+5)) 1 === 7
+
+prop_additionAndMultiplication :: Property
+prop_additionAndMultiplication =
+  property $
+    ((*) <*> (+10)) 3 === 39
+
+prop_moreAdditionAndMultiplication :: Property
+prop_moreAdditionAndMultiplication =
+  property $
+    ((*) <*> (+2)) 3 === 15
+
+prop_pureFunction :: Property
+prop_pureFunction =
+  property $ do
+    x <- genInt
+    y <- genInt
+    pure x y === x
+
+prop_plusOverExactlyOne :: Property
+prop_plusOverExactlyOne =
+  property $ do
+    x <- genInt
+    y <- genInt
+    lift2 (+) (ExactlyOne x) (ExactlyOne y) === ExactlyOne (x + y)
+
+prop_plusOverList :: Property
+prop_plusOverList =
+  property $
+    lift2 (+) (listh [1,2,3]) (listh [4,5]) === listh [5,6,6,7,7,8]
+
+prop_plusOverTwoOptionals :: Property
+prop_plusOverTwoOptionals =
+  property $ do
+    x <- genInt
+    y <- genInt
+    lift2 (+) (Full x) (Full y) === Full (x + y)
+
+prop_plusOverLeftEmpty :: Property
+prop_plusOverLeftEmpty =
+  property $ do
+    x <- genInt
+    lift2 (+) Empty (Full x) === Empty
+
+prop_plusOverRightEmpty :: Property
+prop_plusOverRightEmpty =
+  property $ do
+    x <- genInt
+    lift2 (+) (Full x) Empty === Empty
+
+prop_plusOverFunctions :: Property
+prop_plusOverFunctions =
+  property $
+    lift2 (+) length sum (listh [4, 5, 6]) === 18
+
+prop_lift3PlusOverExactlyOne :: Property
+prop_lift3PlusOverExactlyOne =
+  property $ do
+    x <- genInt
+    y <- genInt
+    z <- genInt
+    lift3 (\a b c -> a + b + c) (ExactlyOne x) (ExactlyOne y) (ExactlyOne z)
+      === ExactlyOne (x + y + z)
+
+prop_lift3PlusOverList :: Property
+prop_lift3PlusOverList =
+  property $
+    lift3 (\a b c -> a + b + c) (listh [1,2,3]) (listh [4,5]) (listh [6,7,8])
+      === listh [11,12,13,12,13,14,12,13,14,13,14,15,13,14,15,14,15,16]
+
+prop_lift3PlusOverThreeOptionals :: Property
+prop_lift3PlusOverThreeOptionals =
+  property $ do
+    x <- genInt
+    y <- genInt
+    z <- genInt
+    lift3 (\a b c -> a + b + c) (Full x) (Full y) (Full z)
+      === Full 24
+
+prop_lift3PlusOverFirstEmpty :: Property
+prop_lift3PlusOverFirstEmpty =
+  property $ do
+    x <- genInt
+    y <- genInt
+    lift3 (\a b c -> a + b + c) (Full x) (Full y) Empty
+      === Empty
+
+prop_lift3PlusOverLastEmpty :: Property
+prop_lift3PlusOverLastEmpty =
+  property $ do
+    x <- genInt
+    y <- genInt
+    lift3 (\a b c -> a + b + c) Empty (Full x) (Full y)
+      === Empty
+
+prop_lift3PlusOverTwoEmpty :: Property
+prop_lift3PlusOverTwoEmpty =
+  property $ do
+    x <- genInt
+    lift3 (\a b c -> a + b + c) Empty Empty (Full x)
+      === Empty
+
+prop_lift3PlusOverFunctions :: Property
+prop_lift3PlusOverFunctions =
+  property $
+    lift3 (\a b c -> a + b + c) length sum product (listh [4, 5, 6])
+      === 138
+
+{--
 spec :: Spec
 spec = do
-  describe "ExactlyOne instance" $ do
-    prop "pure == ExactlyOne" $ \(x :: Integer) ->
-      pure x === ExactlyOne x
-    it "Applying within ExactlyOne" $
-      ExactlyOne (+ 10) <*> ExactlyOne 8
-        `shouldBe`
-          ExactlyOne 18
-
-  describe "List instance" $ do
-    prop "pure" $
-      \x -> pure x === (x :. Nil :: List Integer)
-    it "<*>" $
-      (+1) :. (*2) :. Nil <*> listh [1,2,3]
-        `shouldBe`
-          listh [2,3,4,2,4,6]
-
-  describe "lift1" $ do
-    it "ExactlyOne" $
-      lift1 (+ 1) (ExactlyOne 2)
-        `shouldBe`
-          ExactlyOne (3 :: Integer)
-    it "empty List" $
-      lift1 (+ 1) Nil
-        `shouldBe`
-          Nil
-    it "List" $
-      lift1 (+ 1) (listh [1,2,3])
-        `shouldBe`
-          listh [2,3,4]
-
-  describe "Optional instance" $ do
-    prop "pure" $
-      \(x :: Integer) -> pure x === Full x
-    it "Full <*> Full" $
-      Full (+8) <*> Full 7
-        `shouldBe`
-          Full 15
-    it "Empty <*> Full" $
-      Empty <*> Full "tilt"
-        `shouldBe`
-          (Empty :: Optional Integer)
-    it "Full <*> Empty" $
-      Full (+8) <*> Empty
-        `shouldBe`
-          Empty
-
-  describe "Function instance" $ do
-    it "addition" $
-      ((+) <*> (+10)) 3
-        `shouldBe`
-          16
-    it "more addition" $
-      ((+) <*> (+5)) 3
-        `shouldBe`
-          11
-    it "even more addition" $
-      ((+) <*> (+5)) 1
-        `shouldBe`
-          7
-    it "addition and multiplication" $
-      ((*) <*> (+10)) 3
-        `shouldBe`
-          39
-    it "more addition and multiplcation" $
-      ((*) <*> (+2)) 3
-        `shouldBe`
-          15
-    prop "pure" $
-      \(x :: Integer) (y :: Integer) -> pure x y == x
-
-  describe "lift2" $ do
-    it "+ over ExactlyOne" $
-      lift2 (+) (ExactlyOne 7) (ExactlyOne 8)
-        `shouldBe`
-          ExactlyOne 15
-    it "+ over List" $
-      lift2 (+) (listh [1,2,3]) (listh [4,5])
-        `shouldBe`
-          listh [5,6,6,7,7,8]
-    it "+ over Optional - all full" $
-      lift2 (+) (Full 7) (Full 8)
-        `shouldBe`
-          Full 15
-    it "+ over Optional - first Empty" $
-      lift2 (+) Empty (Full 8)
-        `shouldBe`
-          Empty
-    it "+ over Optional - second Empty" $
-      lift2 (+) (Full 7) Empty
-        `shouldBe`
-          Empty
-    it "+ over functions" $
-      lift2 (+) length sum (listh [4,5,6])
-        `shouldBe`
-          18
-
-  describe "lift3" $ do
-    it "+ over ExactlyOne" $
-      lift3 (\a b c -> a + b + c) (ExactlyOne 7) (ExactlyOne 8) (ExactlyOne 9)
-        `shouldBe`
-          ExactlyOne 24
-    it "+ over List" $
-      lift3 (\a b c -> a + b + c) (listh [1,2,3]) (listh [4,5]) (listh [6,7,8])
-        `shouldBe`
-
-        listh [11,12,13,12,13,14,12,13,14,13,14,15,13,14,15,14,15,16]
-    it "+ over Optional" $
-      lift3 (\a b c -> a + b + c) (Full 7) (Full 8) (Full 9)
-        `shouldBe`
-          Full 24
-    it "+ over Optional - third Empty" $
-      lift3 (\a b c -> a + b + c) (Full 7) (Full 8) Empty
-        `shouldBe`
-          Empty
-    it "+ over Optional - first Empty" $
-      lift3 (\a b c -> a + b + c) Empty (Full 8) (Full 9)
-        `shouldBe`
-          Empty
-    it "+ over Optional - first and second Empty" $
-      lift3 (\a b c -> a + b + c) Empty Empty (Full 9)
-        `shouldBe`
-          Empty
-    it "+ over functions" $
-      lift3 (\a b c -> a + b + c) length sum product (listh [4,5,6])
-        `shouldBe`
-          138
-
   describe "lift4" $ do
     it "+ over ExactlyOne" $
       lift4 (\a b c d -> a + b + c + d) (ExactlyOne 7) (ExactlyOne 8) (ExactlyOne 9) (ExactlyOne 10)
@@ -326,3 +397,4 @@ spec = do
       filtering (const $ True :. True :.  Nil) (1 :. 2 :. 3 :. Nil)
         `shouldBe`
           expected
+--}
