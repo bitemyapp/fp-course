@@ -21,7 +21,7 @@ The exercises are designed in a way that requires personal guidance, so if you a
 #### Differences from the Original
 
 - We officially support the `stack` build tool.
-- The test suite is converted from `tasty` to `hspec`.
+- The test suite is converted from `tasty` to `Hspec`.
 
 ### Getting Help
 
@@ -33,10 +33,6 @@ however, your first post might be moderated. This is simply to prevent spam.
 2. \#haskell or \#haskell-beginners [on the FPChat Slack](https://fpchat-invite.herokuapp.com/). FPChat is a Slack community of fellow travelers. The \#haskell and \#haskell-beginners channels are good places to seek assistance with this course.
 
 ### Getting Started
-
-<!-- **NOTE** If you do not wish to install these dependencies, you may use a virtual machine -->
-<!-- instead. [Instructions](ops/README.md) for automatically building a virtual machine are -->
-<!-- available in this repository for your convenience. -->
 
 1. [Install Stack](https://haskellstack.org/) which will manage your compiler versions automatically and enable you to build this project.
 
@@ -135,13 +131,13 @@ however, your first post might be moderated. This is simply to prevent spam.
 Tests are available as a [tasty](https://hackage.haskell.org/package/tasty)
 test suite.
 
-#### tasty
+#### Hspec
 
-Tasty tests are stored under the `test/` directory. Each module from the course
-that has tests has a corresponding `<MODULE>Test.hs` file. Within each test
-module, tests for each function are grouped using the `testGroup` function.
-Within each test group there are test cases (`testCase` function), and
-properties (`testProperty` function).
+Hspec tests are stored under the `test/` directory. Each module from the course
+that has tests has a corresponding `<MODULE>Spec.hs` file. Within each test
+module, tests for each function are grouped using the `describe` function.
+Within each test group there are test cases (`it` function), and
+properties (`prop` function).
 
 To run the full test suite, build the project as follows:
 
@@ -152,11 +148,11 @@ pattern. Tests are organised in nested groups named after the relevant module
 and function, so pattern matching should be intuitive. For example, to run the
 tests for the `List` module you could run:
 
-    > stack test --ta "--match=ListSpec"
+    > stack test --ta "--match=Course.List/"
 
 Likewise, to run only the tests for the `headOr` function in the `List` module, you could use:
 
-    > stack test --ta "--match=headOr"
+    > stack test --ta "--match=Course.List/headOr"
 
 In addition, GHCi may be used to run tasty tests. Assuming you have run `ghci`
 from the root of the project, you may do the following:
@@ -166,7 +162,7 @@ from the root of the project, you may do the following:
 make test-ghci
 ```
 
-From there you can run `:main` at your GHCi prompt to run the entire test suite. If you want to do the equivalent of `stack test --ta "--pattern=Tests/List/"` in GHCi do this:
+From there you can run `:main` at your GHCi prompt to run the entire test suite. If you want to do the equivalent of `stack test --ta "--match=ListSpec"` in GHCi do this:
 
 ```
 :main --match=ListSpec
@@ -175,10 +171,10 @@ From there you can run `:main` at your GHCi prompt to run the entire test suite.
 Similarly you can run:
 
 ```
-:main --match=headOr
+:main --match=ListSpec/headOr
 ```
 
-To target just the `List/headOr` tests. If you've changed your code, run `:r` to reload and then run your `:main` invocation again.
+To target just the `ListSpec/headOr` tests. If you've changed your code, run `:r` to reload and then run your `:main` invocation again.
 
 
 ### Progression
