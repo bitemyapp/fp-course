@@ -12,7 +12,7 @@ import           Course.Monad      (join, (<**>), (=<<), (>>=), (<=<))
 import           Course.Optional   (Optional (..))
 
 spec :: Spec
-spec = do
+spec = describe "MonadSpec" $ do
   describe "Bind tests" $ do
     it "(=<<) for ExactlyOne" $
       ((\x -> ExactlyOne(x+1)) =<< ExactlyOne 2) `shouldBe` ExactlyOne 3

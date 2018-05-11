@@ -4,14 +4,14 @@
 module Course.ComonadSpec where
 
 
-import           Test.Hspec               (Spec, it, shouldBe)
+import           Test.Hspec               (Spec, describe, it, shouldBe)
 
 import           Course.Comonad    (copure, (<$$>))
 import           Course.Core
 import           Course.ExactlyOne (ExactlyOne (..))
 
 spec :: Spec
-spec = do
+spec = describe "ComonadSpec" $ do
   it "ExactlyOne" $ copure (ExactlyOne 7) `shouldBe` 7
 
   it "<$$>" $

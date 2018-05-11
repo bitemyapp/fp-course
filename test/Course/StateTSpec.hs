@@ -24,7 +24,7 @@ import           Course.StateT         (Logger (..), OptionalT (..),
                                         runOptionalT, runState', state')
 
 spec :: Spec
-spec = do
+spec = describe "StateTSpec" $ do
 
   describe "Functor" $ do
     it "<$>" $ do

@@ -15,7 +15,7 @@ import           Course.List       (List (..))
 import           Course.Parser     (ParseResult (..), isErrorResult, parse)
 
 spec :: Spec
-spec = do
+spec = describe "JsonParserSpec" $ do
   describe "jsonString" $ do
     it "parse whole ASCII input" $
       parse jsonString "\" abc\"" `shouldBe` Result "" " abc"

@@ -19,8 +19,8 @@ import           Course.List           (List (..), filter, length, listh,
 import           Course.Optional       (Optional (..))
 
 spec :: Spec
-spec = do
-  describe  "ExactlyOne instance" $ do
+spec = describe "ApplicativeSpec" $ do
+  describe "ExactlyOne instance" $ do
     prop "pure == ExactlyOne" $ \(x :: Integer) ->
       pure x === ExactlyOne x
     it "Applying within ExactlyOne" $

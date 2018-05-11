@@ -15,7 +15,7 @@ import           Course.List              (List (..))
 import           Course.Optional          (Optional (..))
 
 spec :: Spec
-spec = do
+spec = describe "FunctorSpec" $ do
   it "ExactlyOne" $ (+1) <$> ExactlyOne 2 `shouldBe` ExactlyOne 3
 
   describe "List" $ do

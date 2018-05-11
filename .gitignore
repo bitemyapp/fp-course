@@ -39,3 +39,6 @@ TAGS
 # Vagrant
 .vagrant
 ops/*.retry
+
+# HSpec
+.hspec-failures

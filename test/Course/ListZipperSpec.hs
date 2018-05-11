@@ -35,7 +35,7 @@ import           Course.Gens              (forAllListZipper,
                                            forAllListZipperWithInt, forAllLists,
                                            forAllListsAndBool)
 spec :: Spec
-spec = do
+spec = describe "ListZipperSpec" $ do
   describe "Functor" $ do
     it "ListZipper (<$>)" $
       (+1) <$> zipper [3,2,1] 4 [5,6,7] `shouldBe` zipper [4,3,2] 5 [6,7,8]

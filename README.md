@@ -152,29 +152,30 @@ pattern. Tests are organised in nested groups named after the relevant module
 and function, so pattern matching should be intuitive. For example, to run the
 tests for the `List` module you could run:
 
-    > stack test --ta "--pattern=Tests/List/"
+    > stack test --ta "--match=ListSpec"
 
 Likewise, to run only the tests for the `headOr` function in the `List` module, you could use:
 
-    > stack test --ta "--pattern=List/headOr"
+    > stack test --ta "--match=headOr"
 
 In addition, GHCi may be used to run tasty tests. Assuming you have run `ghci`
 from the root of the project, you may do the following:
 
 ```
+# Ensure you've run `make test` at least once!
 make test-ghci
 ```
 
 From there you can run `:main` at your GHCi prompt to run the entire test suite. If you want to do the equivalent of `stack test --ta "--pattern=Tests/List/"` in GHCi do this:
 
 ```
-:main --pattern=Tests/List/
+:main --match=ListSpec
 ```
 
 Similarly you can run:
 
 ```
-:main --pattern=List/headOr
+:main --match=headOr
 ```
 
 To target just the `List/headOr` tests. If you've changed your code, run `:r` to reload and then run your `:main` invocation again.

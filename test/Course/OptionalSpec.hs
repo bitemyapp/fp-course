@@ -9,7 +9,7 @@ import           Course.Core
 import           Course.Optional  (Optional (..), bindOptional, mapOptional,
                                    (<+>), (??))
 spec :: Spec
-spec = do
+spec = describe "OptionalSpec" $ do
   describe "mapOptional" $ do
     it "Empty" $
       mapOptional (+1) Empty `shouldBe` Empty

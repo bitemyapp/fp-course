@@ -24,7 +24,7 @@ import           Course.State             (State (..), distinct, eval, exec,
                                            put, runState)
 
 spec :: Spec
-spec = do
+spec = describe "StateSpec" $ do
   describe "State methods" $ do
     prop "exec" $
       \(Fun _ f :: Fun Integer (Integer, Integer)) s -> exec (State f) s == snd (runState (State f) s)
