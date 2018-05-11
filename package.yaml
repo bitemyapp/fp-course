@@ -1,5 +1,5 @@
 name: course
-version: '0.1.4'
+version: 0.1.5
 synopsis: Source code for a functional programming course
 description: Source code for a course in functional programming using Haskell
 category: Education
