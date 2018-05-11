@@ -4,13 +4,13 @@
 
 module Course.ApplicativeSpec where
 
-import           Test.Hspec
-import Test.QuickCheck ((===))
+import           Test.Hspec            (describe, it, Spec, shouldBe)
 import           Test.Hspec.QuickCheck (prop)
+import           Test.QuickCheck       ((===))
 
-import           Course.Applicative    (filtering, lift2, lift3, lift4, pure,
-                                        replicateA, sequence, (*>), lift1,
-                                        (<*), (<*>))
+import           Course.Applicative    (filtering, lift1, lift2, lift3, lift4,
+                                        pure, replicateA, sequence, (*>), (<*),
+                                        (<*>))
 import           Course.Core
 import           Course.ExactlyOne     (ExactlyOne (..))
 import           Course.Functor        ((<$>))
