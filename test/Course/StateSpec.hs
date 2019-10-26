@@ -49,6 +49,8 @@ spec = do
   describe "Monad" $ do
     it "(=<<)" $
       runState ((const $ put 2) =<< put 1) 0 `shouldBe` ((),2)
+    it "" $
+      runState ((\a -> State (\s -> (a * 3, s * 2))) =<< State (\s -> (s + 2, s + 1))) 2 `shouldBe` (12, 6)
     it "(>>=)" $
       let modify f = State (\s -> ((), f s))
        in runState (modify (+1) >>= \() -> modify (*2)) 7  `shouldBe` ((),16)
