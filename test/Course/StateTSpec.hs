@@ -153,7 +153,7 @@ spec = do
           `shouldBe`
             Logger (1:.2:.3:.4:.Nil) 10
 
-    describe "Functor" $ do
+    describe "Monad" $ do
       it "(=<<) for Logger" $ do
         let
           func a =
