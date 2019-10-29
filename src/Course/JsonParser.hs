@@ -79,12 +79,15 @@ toSpecialCharacter c =
               ('\\', Backslash) :.
               Nil
   in snd <$> find ((==) c . fst) table
-  
+
 -- | Parse a JSON string. Handle double-quotes, special characters, hexadecimal characters. See http://json.org for the full list of control characters in JSON.
 --
 -- /Tip:/ Use `hex`, `fromSpecialCharacter`, `between`, `is`, `charTok`, `toSpecialCharacter`.
 --
 -- >>> parse jsonString "\" abc\""
+-- Result >< " abc"
+--
+-- >>> parse jsonString "\" abc\" "
 -- Result >< " abc"
 --
 -- >>> parse jsonString "\"abc\"def"
@@ -116,7 +119,14 @@ jsonString =
 --
 -- /Tip:/ Use @readFloats@.
 --
+-- /Optional:/ As an extra challenge, you may wish to support exponential notation
+-- as defined on http://json.org/
+-- This is not required.
+--
 -- >>> parse jsonNumber "234"
+-- Result >< 234 % 1
+--
+-- >>> parse jsonNumber "234 "
 -- Result >< 234 % 1
 --
 -- >>> parse jsonNumber "-234"

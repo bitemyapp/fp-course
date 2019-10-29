@@ -12,7 +12,7 @@ import Course.ExactlyOne
 import Course.Optional
 import Course.Compose
 
--- | All instances of the `Traversable` type-class must satisfy two laws. These
+-- | All instances of the `Traversable` type-class must satisfy three laws. These
 -- laws are not checked by the compiler. These laws are given as:
 --
 -- * The law of naturality
@@ -25,35 +25,35 @@ import Course.Compose
 --   `∀f g. traverse ((g <$>) . f) ≅ (traverse g <$>) . traverse f`
 class Functor t => Traversable t where
   traverse ::
-    Applicative f =>
-    (a -> f b)
+    Applicative k =>
+    (a -> k b)
     -> t a
-    -> f (t b)
+    -> k (t b)
 
 instance Traversable List where
   traverse ::
-    Applicative f =>
-    (a -> f b)
+    Applicative k =>
+    (a -> k b)
     -> List a
-    -> f (List b)
+    -> k (List b)
   traverse f =
     foldRight (\a b -> (:.) <$> f a <*> b) (pure Nil)
 
 instance Traversable ExactlyOne where
   traverse ::
-    Applicative f =>
-    (a -> f b)
+    Applicative k =>
+    (a -> k b)
     -> ExactlyOne a
-    -> f (ExactlyOne b)
+    -> k (ExactlyOne b)
   traverse =
     error "todo: Course.Traversable traverse#instance ExactlyOne"
 
 instance Traversable Optional where
   traverse ::
-    Applicative f =>
-    (a -> f b)
+    Applicative k =>
+    (a -> k b)
     -> Optional a
-    -> f (Optional b)
+    -> k (Optional b)
   traverse =
     error "todo: Course.Traversable traverse#instance Optional"
 
@@ -68,9 +68,9 @@ instance Traversable Optional where
 -- >>> sequenceA (Full (*10)) 6
 -- Full 60
 sequenceA ::
-  (Applicative f, Traversable t) =>
-  t (f a)
-  -> f (t a)
+  (Applicative k, Traversable t) =>
+  t (k a)
+  -> k (t a)
 sequenceA =
   error "todo: Course.Traversable#sequenceA"
 
@@ -82,7 +82,7 @@ instance (Traversable f, Traversable g) =>
 
 -- | The `Product` data type contains one value from each of the two type constructors.
 data Product f g a =
-  Product (f a) (g a)
+  Product (f a) (g a) deriving (Show, Eq)
 
 instance (Functor f, Functor g) =>
   Functor (Product f g) where
@@ -99,7 +99,7 @@ instance (Traversable f, Traversable g) =>
 -- | The `Coproduct` data type contains one value from either of the two type constructors.
 data Coproduct f g a =
   InL (f a)
-  | InR (g a)
+  | InR (g a) deriving (Show, Eq)
 
 instance (Functor f, Functor g) =>
   Functor (Coproduct f g) where
