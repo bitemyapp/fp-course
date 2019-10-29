@@ -40,7 +40,7 @@ instance Show a => Show (ParseResult a) where
     stringconcat ["Unexpected string: ", show s]
   show (Result i a) =
     stringconcat ["Result >", hlist i, "< ", show a]
-  
+
 instance Functor ParseResult where
   _ <$> UnexpectedEof =
     UnexpectedEof
@@ -53,7 +53,7 @@ instance Functor ParseResult where
   f <$> Result i a =
     Result i (f a)
 
--- Function to determine is a parse result is an error.
+-- Function to determine whether this @ParseResult@ is an error.
 isErrorResult ::
   ParseResult a
   -> Bool
@@ -73,15 +73,15 @@ onResult ::
   ParseResult a
   -> (Input -> a -> ParseResult b)
   -> ParseResult b
-onResult UnexpectedEof _ = 
+onResult UnexpectedEof _ =
   UnexpectedEof
-onResult (ExpectedEof i) _ = 
+onResult (ExpectedEof i) _ =
   ExpectedEof i
-onResult (UnexpectedChar c) _ = 
+onResult (UnexpectedChar c) _ =
   UnexpectedChar c
-onResult (UnexpectedString s)  _ = 
+onResult (UnexpectedString s)  _ =
   UnexpectedString s
-onResult (Result i a) k = 
+onResult (Result i a) k =
   k i a
 
 data Parser a = P (Input -> ParseResult a)
@@ -216,6 +216,105 @@ instance Applicative Parser where
   (<*>) =
     error "todo: Course.Parser (<*>)#instance Parser"
 
+-- | Return a parser that produces a character but fails if
+--
+--   * The input is empty.
+--
+--   * The character does not satisfy the given predicate.
+--
+-- /Tip:/ The @(=<<)@, @unexpectedCharParser@ and @character@ functions will be helpful here.
+--
+-- >>> parse (satisfy isUpper) "Abc"
+-- Result >bc< 'A'
+--
+-- >>> isErrorResult (parse (satisfy isUpper) "abc")
+-- True
+satisfy ::
+  (Char -> Bool)
+  -> Parser Char
+satisfy =
+  error "todo: Course.Parser#satisfy"
+
+-- | Return a parser that produces the given character but fails if
+--
+--   * The input is empty.
+--
+--   * The produced character is not equal to the given character.
+--
+-- /Tip:/ Use the @satisfy@ function.
+is ::
+  Char -> Parser Char
+is =
+  error "todo: Course.Parser#is"
+
+-- | Return a parser that produces a character between '0' and '9' but fails if
+--
+--   * The input is empty.
+--
+--   * The produced character is not a digit.
+--
+-- /Tip:/ Use the @satisfy@ and @Data.Char#isDigit@ functions.
+--
+-- >>> parse digit "9"
+-- Result >< '9'
+--
+-- >>> parse digit "123"
+-- Result >23< '1'
+--
+-- >>> isErrorResult (parse digit "")
+-- True
+--
+-- >>> isErrorResult (parse digit "hello")
+-- True
+digit ::
+  Parser Char
+digit =
+  error "todo: Course.Parser#digit"
+
+--
+-- | Return a parser that produces a space character but fails if
+--
+--   * The input is empty.
+--
+--   * The produced character is not a space.
+--
+-- /Tip:/ Use the @satisfy@ and @Data.Char#isSpace@ functions.
+--
+-- >>> parse space " "
+-- Result >< ' '
+--
+-- >>> parse space "\n z"
+-- Result > z< '\n'
+--
+-- >>> isErrorResult (parse space "")
+-- True
+--
+-- >>> isErrorResult (parse space "a")
+-- True
+space ::
+  Parser Char
+space =
+  error "todo: Course.Parser#space"
+
+-- | Return a parser that conses the result of the first parser onto the result of
+-- the second. Pronounced "cons parser".
+--
+-- /Tip:/ Use @lift2@
+--
+-- >>> parse (character .:. valueParser Nil) "abc"
+-- Result >bc< "a"
+--
+-- >>> parse (digit .:. valueParser "hello") "321"
+-- Result >21< "3hello"
+(.:.) ::
+  Parser a
+  -> Parser (List a)
+  -> Parser (List a)
+(.:.) =
+  error "todo: Course.Parser#(.:.)"
+
+infixr 5 .:.
+
 -- | Return a parser that continues producing a list of values from the given parser.
 --
 -- /Tip:/ Use @list1@, @pure@ and @(|||)@.
@@ -261,62 +360,6 @@ list1 ::
   -> Parser (List a)
 list1 =
   error "todo: Course.Parser#list1"
-
--- | Return a parser that produces a character but fails if
---
---   * The input is empty.
---
---   * The character does not satisfy the given predicate.
---
--- /Tip:/ The @(=<<)@, @unexpectedCharParser@ and @character@ functions will be helpful here.
---
--- >>> parse (satisfy isUpper) "Abc"
--- Result >bc< 'A'
---
--- >>> isErrorResult (parse (satisfy isUpper) "abc")
--- True
-satisfy ::
-  (Char -> Bool)
-  -> Parser Char
-satisfy =
-  error "todo: Course.Parser#satisfy"
-
--- | Return a parser that produces the given character but fails if
---
---   * The input is empty.
---
---   * The produced character is not equal to the given character.
---
--- /Tip:/ Use the @satisfy@ function.
-is ::
-  Char -> Parser Char
-is =
-  error "todo: Course.Parser#is"
-
--- | Return a parser that produces a character between '0' and '9' but fails if
---
---   * The input is empty.
---
---   * The produced character is not a digit.
---
--- /Tip:/ Use the @satisfy@ and @Data.Char#isDigit@ functions.
-digit ::
-  Parser Char
-digit =
-  error "todo: Course.Parser#digit"
-
---
--- | Return a parser that produces a space character but fails if
---
---   * The input is empty.
---
---   * The produced character is not a space.
---
--- /Tip:/ Use the @satisfy@ and @Data.Char#isSpace@ functions.
-space ::
-  Parser Char
-space =
-  error "todo: Course.Parser#space"
 
 -- | Return a parser that produces one or more space characters
 -- (consuming until the first non-space) but fails if
@@ -521,15 +564,19 @@ phoneParser =
 
 -- | Write a parser for Person.
 --
--- /Tip:/ Use @(=<<)@,
+-- /Tip:/ Use @(>>=)@,
 --            @pure@,
---            @(>>>)@,
+--            @(*>)@,
 --            @spaces1@,
 --            @ageParser@,
 --            @firstNameParser@,
 --            @surnameParser@,
 --            @smokerParser@,
 --            @phoneParser@.
+--
+-- /Tip:/ Follow-on exercise: Use *(<*>)* instead of @(>>=)@.
+--
+-- /Tip:/ Follow-on exercise: Use *(<*>~)* instead of @(<*>)@ and @(*>)@.
 --
 -- >>> isErrorResult (parse personParser "")
 -- True
