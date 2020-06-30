@@ -75,8 +75,8 @@ headOr ::
   a
   -> List a
   -> a
-headOr =
-  error "todo: Course.List#headOr"
+headOr x Nil = x
+headOr _ (x :. _) = x
 
 -- | The product of the elements of a list.
 --
@@ -91,8 +91,8 @@ headOr =
 product ::
   List Int
   -> Int
-product =
-  error "todo: Course.List#product"
+product (x :. xs) = x*product xs
+product Nil = 1
 
 -- | Sum the elements of the list.
 --
@@ -106,8 +106,8 @@ product =
 sum ::
   List Int
   -> Int
-sum =
-  error "todo: Course.List#sum"
+sum = foldLeft (+) (0::Int)
+
 
 -- | Return the length of the list.
 --
@@ -118,8 +118,8 @@ sum =
 length ::
   List a
   -> Int
-length =
-  error "todo: Course.List#length"
+length (_ :. xs) = 1 + length xs
+length Nil = 0
 
 -- | Map the given function on each element of the list.
 --
@@ -133,8 +133,9 @@ map ::
   (a -> b)
   -> List a
   -> List b
-map =
-  error "todo: Course.List#map"
+map f (x :. xs) = f x :. map f xs
+map _ Nil = Nil
+
 
 -- | Return elements satisfying the given predicate.
 --
@@ -150,8 +151,10 @@ filter ::
   (a -> Bool)
   -> List a
   -> List a
-filter =
-  error "todo: Course.List#filter"
+filter f (x :. xs) = if f x then
+  x :. filter f xs else
+  filter f xs
+filter _ Nil = Nil
 
 -- | Append two lists to a new list.
 --
@@ -169,8 +172,7 @@ filter =
   List a
   -> List a
   -> List a
-(++) =
-  error "todo: Course.List#(++)"
+(++) x y = foldRight (:.) y x
 
 infixr 5 ++
 
@@ -187,8 +189,9 @@ infixr 5 ++
 flatten ::
   List (List a)
   -> List a
-flatten =
-  error "todo: Course.List#flatten"
+flatten ((x :. xs) :.ys) = x :. flatten (xs :. ys)
+flatten (Nil:.ys) = flatten ys
+flatten Nil = Nil
 
 -- | Map a function then flatten to a list.
 --
@@ -204,8 +207,7 @@ flatMap ::
   (a -> List b)
   -> List a
   -> List b
-flatMap =
-  error "todo: Course.List#flatMap"
+flatMap x y = flatten (map x y)
 
 -- | Flatten a list of lists to a list (again).
 -- HOWEVER, this time use the /flatMap/ function that you just wrote.
@@ -214,8 +216,7 @@ flatMap =
 flattenAgain ::
   List (List a)
   -> List a
-flattenAgain =
-  error "todo: Course.List#flattenAgain"
+flattenAgain = flatMap (\x -> x) 
 
 -- | Convert a list of optional values to an optional list of values.
 --
@@ -242,8 +243,8 @@ flattenAgain =
 seqOptional ::
   List (Optional a)
   -> Optional (List a)
-seqOptional =
-  error "todo: Course.List#seqOptional"
+seqOptional (x :. xs) = twiceOptional (:.) x (seqOptional xs)
+seqOptional Nil = Full Nil
 
 -- | Find the first element in the list matching the predicate.
 --
@@ -265,8 +266,11 @@ find ::
   (a -> Bool)
   -> List a
   -> Optional a
-find =
-  error "todo: Course.List#find"
+find f (x :. xs) = if f x then
+  Full x else
+  find f xs
+find _ Nil = Empty
+  
 
 -- | Determine if the length of the given list is greater than 4.
 --
@@ -284,8 +288,31 @@ find =
 lengthGT4 ::
   List a
   -> Bool
-lengthGT4 =
-  error "todo: Course.List#lengthGT4"
+lengthGT4 = lengthGTN 4 where
+  lengthGTN 0 Nil = False
+  lengthGTN 0 _   = True
+  lengthGTN _ Nil = False
+  lengthGTN n (_:.xs) = lengthGTN (n-1) xs
+-- lengthGTN n xs =
+--       case n of
+--         0 -> case xs of
+--           Nil -> False
+--           _ -> True
+--         n' -> case xs of
+--           (y :. ys) -> lengthGTN (n'-1) ys
+--           Nil -> False
+
+-- lengthGTN :: 
+--   Int -> List a -> Bool
+-- lengthGTN n xs =
+--       case n of
+--         0 -> case xs of
+--           Nil -> False
+--           _ -> True
+--         n' -> case xs of
+--           (y :. ys) -> lengthGTN (n'-1) ys
+--           Nil -> False
+            
 
 -- | Reverse a list.
 --
@@ -301,8 +328,8 @@ lengthGT4 =
 reverse ::
   List a
   -> List a
-reverse =
-  error "todo: Course.List#reverse"
+reverse xs = foldLeft (flip (:.)) Nil xs
+
 
 -- | Produce an infinite `List` that seeds with the given value at its head,
 -- then runs the given function for subsequent elements
@@ -330,8 +357,8 @@ produce f x = x :. produce f (f x)
 notReverse ::
   List a
   -> List a
-notReverse =
-  error "todo: Is it even possible?"
+notReverse = reverse
+
 
 ---- End of list exercises
 
