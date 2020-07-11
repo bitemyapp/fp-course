@@ -170,8 +170,9 @@ distinct ::
   Ord a =>
   List a
   -> List a
-distinct =
-  error "todo: Course.State#distinct"
+distinct xs = eval (filtering pick xs) S.empty  where
+  pick x = State $ \y ->
+    if S.member x y then (False, y) else (True, S.insert x y)
 
 -- | A happy number is a positive integer, where the sum of the square of its digits eventually reaches 1 after repetition.
 -- In contrast, a sad number (not a happy number) is where the sum of the square of its digits never reaches 1
@@ -197,5 +198,6 @@ distinct =
 isHappy ::
   Integer
   -> Bool
-isHappy =
-  error "todo: Course.State#isHappy"
+isHappy x = contains 1 (firstRepeat $ produce sumDigit x) where 
+  sumDigit 0 = 0
+  sumDigit x = (x `mod` 10) P.^ 2 + (sumDigit $ div x 10)
